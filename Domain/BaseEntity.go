@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 
@@ -23,8 +24,12 @@ func (ent *BaseEntity) NewInstance() {
 	ent.CreateAt = time.Now()
 }
 
-func (ent *BaseEntity) UpdateInstance() {
+func (ent *BaseEntity) UpdateInstance(version uint) error {
 
-	ent.Version = uint(rand.Int())
-	ent.UpdateAt = time.Now()
+	if ent.Version == version {
+		ent.Version = uint(rand.Int())
+		ent.UpdateAt = time.Now()
+		return nil
+	}
+	return errors.New("this data have edited before")
 }

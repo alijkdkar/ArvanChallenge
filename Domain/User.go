@@ -1,9 +1,25 @@
 package domain
 
+import "github.com/google/uuid"
+
 type User struct {
 	BaseEntity
-	MobileNumber string `gorm:"index"`
-	FirstName    string
-	LastName     string
-	CreditCards  []CreditCard `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	MobileNumber string       `gorm:"index"`
+	FirstName    string       `json:"FirstName"`
+	LastName     string       `json:"LastName"`
+	CreditCards  []CreditCard `gorm:"foreignKey:UserRefer"`
+}
+
+func CreateNewUser(firsName, lastName, mobileNumber string) *User {
+	newUser := &User{FirstName: firsName, LastName: lastName, MobileNumber: mobileNumber}
+	newUser.NewInstance()
+	return newUser
+}
+
+type IUserRepository interface {
+	Create(user *User) error
+	GetUserById(id uuid.UUID) User
+	Update(user *User) error
+	DeleteById(id uuid.UUID) error
+	GetUsers() []User
 }
