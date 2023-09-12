@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/alijkdkar/ArvanChallenge/domain"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -28,11 +30,14 @@ func (rp *UserRepository) Create(user *domain.User) error {
 	return nil
 }
 
-func (rp *UserRepository) GetUserById(id uuid.UUID) domain.User {
+func (rp *UserRepository) GetUserById(id uuid.UUID) (domain.User, error) {
 	result := domain.User{}
 
 	rp.Db.First(&result, "id = ?", id)
-	return result
+	if result.Id == uuid.Nil {
+		return result, errors.New("user not found")
+	}
+	return result, nil
 }
 
 func (rp *UserRepository) GetUsers() []domain.User {

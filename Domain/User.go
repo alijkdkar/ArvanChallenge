@@ -18,7 +18,7 @@ func CreateNewUser(firsName, lastName, mobileNumber string) *User {
 
 type IUserRepository interface {
 	Create(user *User) error
-	GetUserById(id uuid.UUID) User
+	GetUserById(id uuid.UUID) (User, error)
 	Update(user *User) error
 	DeleteById(id uuid.UUID) error
 	GetUsers() []User

@@ -1,8 +1,10 @@
 package controller
 
-import "net/http"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-func RegisterControllers(ctx *http.ServeMux) {
+func RegisterControllers(ctx *gin.Engine) {
 	UserHandlerRegister(ctx)
 	//Add Other Controllers
 }

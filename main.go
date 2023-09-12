@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	controller "github.com/alijkdkar/ArvanChallenge/Controller"
 	repository "github.com/alijkdkar/ArvanChallenge/Repository"
 	"github.com/alijkdkar/ArvanChallenge/pkg"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -22,9 +22,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	mux := http.DefaultServeMux
-
+	// mux := http.DefaultServeMux
+	mux := gin.Default()
 	controller.RegisterControllers(mux)
 
-	log.Fatal(http.ListenAndServe(":4879", nil))
+	log.Fatal(mux.Run(":4879"))
 }
