@@ -27,9 +27,10 @@ func (card *CreditCard) SetId(id uuid.UUID) {
 }
 
 type ICreditCardRepositroy interface {
-	Create(user *CreditCard) error
+	Create(card *CreditCard) error
 	GetById(id uuid.UUID) (CreditCard, error)
-	Update(user *CreditCard) error
+	Update(card *CreditCard) error
 	DeleteById(id uuid.UUID) error
 	GetCreditCards(id uuid.UUID) []CreditCard
+	AddTransaction(transaction *Transaction) error
 }

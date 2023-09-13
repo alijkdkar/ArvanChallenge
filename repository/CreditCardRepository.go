@@ -68,3 +68,7 @@ func (rp *CreditCardRepository) GetCreditCards(UserId uuid.UUID) []domain.Credit
 	rp.Db.Find(&cards, "user_refer = ?", UserId)
 	return cards
 }
+
+func (rp *CreditCardRepository) AddTransaction(transaction *domain.Transaction) error {
+	return rp.Db.Create(transaction).Error
+}

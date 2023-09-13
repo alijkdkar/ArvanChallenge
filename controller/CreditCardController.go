@@ -18,6 +18,7 @@ func CreditHandlerRegisters(ctx *gin.Engine) {
 	ctx.GET(baseUrl+"/:userId/detail/:Id", getCardDetail)
 	ctx.DELETE(baseUrl+"/:Id", deleteCard)
 	ctx.PUT(baseUrl+"/:userId/update/:Id", updateCard)
+	ctx.POST(baseUrl+"/:Id/Transaction", CreateTransaction)
 }
 
 func getAllCards(ctx *gin.Context) {
@@ -143,8 +144,47 @@ func updateCard(ctx *gin.Context) {
 
 }
 
+func CreateTransaction(ctx *gin.Context) {
+	cardId := ctx.Param("Id")
+	if cardId == "" {
+		pkg.BadRequestError(ctx)
+		return
+	}
+
+	_cardRep := repository.NewCreditCardRepository()
+	_, err := _cardRep.GetById(uuid.MustParse(cardId))
+	if err != nil {
+		fmt.Println("Card Get By Id error:", err.Error())
+		pkg.NotFoundError(ctx)
+	}
+	var reqest TransactionDto
+	errCast := ctx.ShouldBindJSON(&reqest)
+
+	if errCast != nil {
+		fmt.Println("body cast Error:", errCast)
+		pkg.BadRequestError(ctx)
+		return
+	}
+
+	tranRequest := domain.CreateNewTransaction(reqest.Amount, reqest.Type, uuid.MustParse(cardId), reqest.IsBounce)
+
+	if err := _cardRep.AddTransaction(tranRequest); err != nil {
+		pkg.ServerSideError(ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"message": "transaction done successfully"})
+
+}
+
 type CardDto struct {
 	CardNumber string `json:"CardNumber"`
 	Version    uint   `json:"Version"`
 	// UserId     uuid.UUID `json:"UserId"`
+}
+
+type TransactionDto struct {
+	Amount   float64 `json:"Amount"`
+	Type     uint    `json:"Type"`
+	IsBounce bool    `json:"IsBounce"`
 }
