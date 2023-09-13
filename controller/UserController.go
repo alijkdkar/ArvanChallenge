@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	repository "github.com/alijkdkar/ArvanChallenge/Repository"
 	"github.com/alijkdkar/ArvanChallenge/domain"
@@ -16,10 +15,10 @@ import (
 func UserHandlerRegister(ctx *gin.Engine) {
 	baseUrl := "/user"
 	ctx.GET(baseUrl+"/all", getAll)
-	ctx.POST(baseUrl, createUser)
-	ctx.DELETE(baseUrl+"", deleteUser)
+	ctx.POST(baseUrl+"", createUser)
+	ctx.DELETE(baseUrl+"/:id", deleteUser)
 	ctx.GET(baseUrl+"/:id", getUserDetail)
-	ctx.PUT(baseUrl+"", updateUser)
+	ctx.PUT(baseUrl+"/:id", updateUser)
 
 }
 
@@ -32,6 +31,7 @@ func User(ctx *gin.Context) {
 	errJson := decoder.Decode(&userReq)
 
 	if errJson != nil {
+		fmt.Println("create User command Cast Error", errJson)
 		pkg.BadRequestError(ctx)
 		return
 	}
@@ -51,7 +51,7 @@ func User(ctx *gin.Context) {
 		pkg.ServerSideError(ctx)
 		return
 	}
-	ctx.JSON(http.StatusAccepted, gin.H{
+	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "User Saved",
 	})
 
@@ -60,11 +60,13 @@ func User(ctx *gin.Context) {
 func createUser(ctx *gin.Context) {
 	rep := repository.NewUserRepository()
 
-	decoder := json.NewDecoder(ctx.Request.Body)
 	var userReq createUserCommand
-	errJson := decoder.Decode(&userReq)
+	errJson := ctx.ShouldBindJSON(&userReq)
 
 	if errJson != nil {
+
+		fmt.Println("error on Cast create user to command", errJson)
+
 		pkg.BadRequestError(ctx)
 		return
 	}
@@ -79,6 +81,7 @@ func createUser(ctx *gin.Context) {
 	}
 
 	user := domain.CreateNewUser(userReq.Name, userReq.LastName, userReq.MobileNumber)
+	user.NewInstance()
 	err := rep.Create(user)
 	if err != nil {
 		pkg.ServerSideError(ctx)
@@ -111,17 +114,13 @@ func getUserDetail(ctx *gin.Context) {
 		pkg.NotFoundError(ctx)
 		return
 	}
-	userJson, errr := json.Marshal(user)
-	if errr != nil {
-		pkg.BadRequestError(ctx)
-		return
-	}
-	ctx.JSON(http.StatusAccepted, userJson)
+
+	ctx.JSON(http.StatusAccepted, user)
 }
 
 func deleteUser(ctx *gin.Context) {
 
-	id := strings.TrimPrefix(ctx.Request.URL.Path, "/user/delete/")
+	id := ctx.Param("id")
 	if id == "" {
 		pkg.BadRequestError(ctx)
 		return
@@ -139,36 +138,34 @@ func deleteUser(ctx *gin.Context) {
 }
 
 func updateUser(ctx *gin.Context) {
-	id := strings.TrimPrefix(ctx.Request.URL.Path, "/user/delete/")
+
+	id := ctx.Param("id")
+
 	if id == "" {
+		fmt.Println("Id is empty")
 		pkg.BadRequestError(ctx)
 		return
 	}
 
-	decoder := json.NewDecoder(ctx.Request.Body)
 	var userReq createUserCommand
-	errJson := decoder.Decode(&userReq)
+	errJson := ctx.ShouldBindJSON(&userReq)
 
 	if errJson != nil {
+		fmt.Println("error on cast command:", errJson)
 		pkg.BadRequestError(ctx)
 		return
 	}
 
 	rep := repository.NewUserRepository()
-	userDb, err := rep.GetUserById(uuid.MustParse(id))
 
-	if err != nil {
-		pkg.NotFoundError(ctx)
-		return
-	}
-	if err := userDb.UpdateInstance(userReq.Version); err != nil {
-		pkg.DataVersionError(ctx)
-		return
-	}
-
-	uperr := rep.Update(&userDb)
+	user := domain.CreateNewUser(userReq.Name, userReq.LastName, userReq.MobileNumber)
+	user.Id = uuid.MustParse(id)
+	user.SetVersion(userReq.Version)
+	uperr := rep.Update(user)
 	if uperr != nil {
-		pkg.ServerSideError(ctx)
+		fmt.Println("error on update: ", uperr)
+		pkg.DataVersionCustomError(ctx, uperr.Error())
+		return
 	}
 	ctx.JSON(http.StatusAccepted, gin.H{
 		"message": "user updated",

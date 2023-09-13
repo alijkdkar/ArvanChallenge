@@ -30,3 +30,9 @@ func DataVersionError(ctx *gin.Context) {
 		"message": "409 - this error modify by other user",
 	})
 }
+
+func DataVersionCustomError(ctx *gin.Context, message string) {
+	ctx.JSON(http.StatusConflict, gin.H{
+		"message": "409 - this error modify by other user",
+	})
+}

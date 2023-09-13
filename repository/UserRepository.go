@@ -50,7 +50,7 @@ func (rp *UserRepository) GetUsers() []domain.User {
 func (rp *UserRepository) Update(user *domain.User) error {
 
 	dbData := domain.User{}
-	rp.Db.First(dbData)
+	rp.Db.First(&dbData, "id = ?", user.Id)
 
 	err := user.UpdateInstance(dbData.Version)
 	if err != nil {

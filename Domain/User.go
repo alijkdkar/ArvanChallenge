@@ -16,6 +16,10 @@ func CreateNewUser(firsName, lastName, mobileNumber string) *User {
 	return newUser
 }
 
+func (us *User) SetVersion(version uint) {
+	us.Version = version
+}
+
 type IUserRepository interface {
 	Create(user *User) error
 	GetUserById(id uuid.UUID) (User, error)
