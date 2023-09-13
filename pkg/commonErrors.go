@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,5 +35,11 @@ func DataVersionError(ctx *gin.Context) {
 func DataVersionCustomError(ctx *gin.Context, message string) {
 	ctx.JSON(http.StatusConflict, gin.H{
 		"message": "409 - this error modify by other user",
+	})
+}
+
+func CommonError(ctx *gin.Context, httpStatusCode int, message string) {
+	ctx.JSON(httpStatusCode, gin.H{
+		"message": fmt.Sprintf("%v - %v", httpStatusCode, message),
 	})
 }

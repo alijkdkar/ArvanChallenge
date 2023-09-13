@@ -8,3 +8,28 @@ type CreditCard struct {
 	Transactions []*Transaction `gorm:"foreignKey:CardNumberRefer"`
 	UserRefer    uuid.UUID
 }
+
+func CreateCreditCardNewInstance(cardNumber string, userId uuid.UUID) *CreditCard {
+	card := &CreditCard{
+		CardNumber: cardNumber,
+		UserRefer:  userId,
+	}
+	card.NewInstance()
+	return card
+
+}
+
+func (card *CreditCard) SetVersion(version uint) {
+	card.Version = version
+}
+func (card *CreditCard) SetId(id uuid.UUID) {
+	card.Id = id
+}
+
+type ICreditCardRepositroy interface {
+	Create(user *CreditCard) error
+	GetById(id uuid.UUID) (CreditCard, error)
+	Update(user *CreditCard) error
+	DeleteById(id uuid.UUID) error
+	GetCreditCards(id uuid.UUID) []CreditCard
+}

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	controller "github.com/alijkdkar/ArvanChallenge/Controller"
-	repository "github.com/alijkdkar/ArvanChallenge/Repository"
+	"github.com/alijkdkar/ArvanChallenge/controller"
 	"github.com/alijkdkar/ArvanChallenge/pkg"
+	"github.com/alijkdkar/ArvanChallenge/repository"
 	"github.com/gin-gonic/gin"
 )
 
