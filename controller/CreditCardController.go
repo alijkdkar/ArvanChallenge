@@ -13,12 +13,17 @@ import (
 
 func CreditHandlerRegisters(ctx *gin.Engine) {
 	baseUrl := "/card"
+
 	ctx.GET(baseUrl+"/all/:Id", getAllCards)
 	ctx.POST(baseUrl+"/:Id", createCard)
 	ctx.GET(baseUrl+"/:userId/detail/:Id", getCardDetail)
 	ctx.DELETE(baseUrl+"/:Id", deleteCard)
 	ctx.PUT(baseUrl+"/:userId/update/:Id", updateCard)
+
 	ctx.POST(baseUrl+"/:Id/Transaction", CreateTransaction)
+	ctx.GET(baseUrl+"/Transaction/:cardId", getCardTransactions)
+	// ctx.POST(baseUrl+"/:cardId/Transaction", CreateTransaction)
+	// ctx.GET(baseUrl+"/:cardId/Transaction", getCardTransactions)s
 }
 
 func getAllCards(ctx *gin.Context) {
@@ -84,6 +89,12 @@ func getCardDetail(ctx *gin.Context) {
 	}
 
 	_cardRep := repository.NewCreditCardRepository()
+
+	if _, err := _cardRep.GetById(uuid.MustParse(cardId)); err != nil {
+		pkg.NotFoundError(ctx)
+		return
+	}
+
 	card, err := _cardRep.GetById(uuid.MustParse(cardId))
 	if err != nil {
 		fmt.Println("get card detail:", err)
@@ -175,6 +186,21 @@ func CreateTransaction(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "transaction done successfully"})
 
+}
+
+func getCardTransactions(ctx *gin.Context) {
+	id := ctx.Param("cardId")
+	if id == "" {
+		pkg.BadRequestError(ctx)
+	}
+	_carRepo := repository.NewCreditCardRepository()
+	card, err := _carRepo.GetById(uuid.MustParse(id))
+	if err != nil {
+		pkg.NotFoundError(ctx)
+	}
+	tras := _carRepo.GetTransactions(card.Id)
+
+	ctx.JSON(http.StatusOK, tras)
 }
 
 type CardDto struct {

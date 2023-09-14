@@ -70,5 +70,40 @@ func (rp *CreditCardRepository) GetCreditCards(UserId uuid.UUID) []domain.Credit
 }
 
 func (rp *CreditCardRepository) AddTransaction(transaction *domain.Transaction) error {
-	return rp.Db.Create(transaction).Error
+
+	return rp.Db.Transaction(func(tx *gorm.DB) error {
+
+		var card domain.CreditCard
+		rp.Db.First(&card, "id = ?", transaction.CardNumberRefer)
+		if card.Id == uuid.Nil {
+			return errors.New("card not found")
+		}
+
+		if transaction.Type == 1 {
+			if err := card.SetAmount(card.Amount + (transaction.Amount * 1)); err != nil {
+				return err
+			}
+		} else if transaction.Type == 2 {
+			if err := card.SetAmount(card.Amount + (transaction.Amount * -1)); err != nil {
+				return err
+			}
+		} else {
+			return errors.New("server side error ")
+		}
+
+		rp.Db.Save(&card)
+
+		if newTran := rp.Db.Create(transaction); newTran.Error != nil {
+			return newTran.Error
+		}
+
+		return nil
+	})
+
+}
+
+func (rp *CreditCardRepository) GetTransactions(cardId uuid.UUID) []*domain.Transaction {
+	result := []*domain.Transaction{}
+	rp.Db.Find(&result, "card_number_refer = ?", cardId)
+	return result
 }

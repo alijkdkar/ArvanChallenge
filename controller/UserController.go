@@ -21,41 +21,6 @@ func UserHandlerRegister(ctx *gin.Engine) {
 
 }
 
-// func User(ctx *gin.Context) {
-
-// 	rep := repository.NewUserRepository()
-
-// 	decoder := json.NewDecoder(ctx.Request.Body)
-// 	var userReq createUserCommand
-// 	errJson := decoder.Decode(&userReq)
-
-// 	if errJson != nil {
-// 		fmt.Println("create User command Cast Error", errJson)
-// 		pkg.BadRequestError(ctx)
-// 		return
-// 	}
-
-// 	if userReq.MobileNumber == "" {
-
-// 		ctx.JSON(http.StatusAccepted, gin.H{
-// 			"message": "Mobile number is reqired.",
-// 		})
-
-// 		return
-// 	}
-
-// 	user := domain.CreateNewUser(userReq.Name, userReq.LastName, userReq.MobileNumber)
-// 	err := rep.Create(user)
-// 	if err != nil {
-// 		pkg.ServerSideError(ctx)
-// 		return
-// 	}
-// 	ctx.JSON(http.StatusCreated, gin.H{
-// 		"message": "User Saved",
-// 	})
-
-// }
-
 func createUser(ctx *gin.Context) {
 	rep := repository.NewUserRepository()
 

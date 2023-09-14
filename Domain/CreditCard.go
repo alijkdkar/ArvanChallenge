@@ -1,10 +1,15 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 type CreditCard struct {
 	BaseEntity
 	CardNumber   string
+	Amount       float64
 	Transactions []*Transaction `gorm:"foreignKey:CardNumberRefer"`
 	UserRefer    uuid.UUID
 }
@@ -25,6 +30,14 @@ func (card *CreditCard) SetVersion(version uint) {
 func (card *CreditCard) SetId(id uuid.UUID) {
 	card.Id = id
 }
+func (card *CreditCard) SetAmount(amount float64) error {
+
+	if amount < 0 {
+		return errors.New("card amount can not be negative")
+	}
+	card.Amount = amount
+	return nil
+}
 
 type ICreditCardRepositroy interface {
 	Create(card *CreditCard) error
@@ -33,4 +46,5 @@ type ICreditCardRepositroy interface {
 	DeleteById(id uuid.UUID) error
 	GetCreditCards(id uuid.UUID) []CreditCard
 	AddTransaction(transaction *Transaction) error
+	GetTransactions(id uuid.UUID) []*Transaction
 }
