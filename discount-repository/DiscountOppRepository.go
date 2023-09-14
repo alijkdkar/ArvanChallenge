@@ -62,7 +62,7 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 	discountKey := "discount-Id:" + discTrans.DiscountId.String()
 
 	fmt.Println("in repositor trans:", discTrans)
-	return rp.RedisDb.Watch(ctx, func(tx *redis.Tx) error {
+	err := rp.RedisDb.Watch(ctx, func(tx *redis.Tx) error {
 		fields := []string{"MaxCount", "UsedCount"}
 		tran := rp.RedisDb.TxPipeline()
 		counterRes, er := tx.HMGet(ctx, discountKey, fields...).Result()
@@ -106,5 +106,15 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 		//todo :must throw integration Event to main Service
 		return nil
 	}, discountKey)
+	if err != nil {
+		return err
+	}
 
+	errPublish := rp.RedisDb.Publish(ctx, "chanel1", "Hello, World!").Err()
+	if errPublish != nil {
+		fmt.Println("Error publishing message:", errPublish)
+	} else {
+		fmt.Println("Message published successfully")
+	}
+	return nil
 }
