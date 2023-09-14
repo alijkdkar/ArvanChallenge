@@ -177,7 +177,7 @@ func CreateTransaction(ctx *gin.Context) {
 		return
 	}
 
-	tranRequest := domain.CreateNewTransaction(reqest.Amount, reqest.Type, uuid.MustParse(cardId), reqest.IsBounce)
+	tranRequest := domain.CreateNewTransaction(reqest.Amount, reqest.Type, uuid.MustParse(cardId), reqest.IsBounce, uuid.Nil)
 
 	if err := _cardRep.AddTransaction(tranRequest); err != nil {
 		pkg.ServerSideError(ctx)

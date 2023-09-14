@@ -6,16 +6,18 @@ type Transaction struct {
 	BaseEntity
 	Amount          float64
 	Type            uint
-	IsBounce        bool
+	IsDiscount      bool
 	CardNumberRefer uuid.UUID
+	DiscountReferId uuid.UUID
 }
 
-func CreateNewTransaction(amount float64, typ uint, cardId uuid.UUID, isBounce bool) *Transaction {
+func CreateNewTransaction(amount float64, typ uint, cardId uuid.UUID, isDiscount bool, discountReferId uuid.UUID) *Transaction {
 	newITem := Transaction{
 		Amount:          amount,
 		Type:            typ,
-		IsBounce:        isBounce,
+		IsDiscount:      isDiscount,
 		CardNumberRefer: cardId,
+		DiscountReferId: discountReferId,
 	}
 	newITem.NewInstance()
 	return &newITem

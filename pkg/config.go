@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-var SecretKey []byte
-
 type MyPostgres struct {
 	User       string
 	Password   string
@@ -17,10 +15,13 @@ type MyPostgres struct {
 	Db         string
 	DataSource string
 }
+type MyRedis struct {
+	RedisAddress string
+}
 
 type Config struct {
 	MyPostgres
-	SecretKey []byte
+	MyRedis
 }
 
 func (post Config) LOAD() *Config {
@@ -38,6 +39,10 @@ func (post Config) LOAD() *Config {
 	pos.Port = _port
 
 	pos.Db = strings.ToLower(os.Getenv("POSTGRES_DB"))
-	SecretKey = []byte(os.Getenv("HashSecertKey"))
-	return &Config{pos, SecretKey}
+
+	redis := MyRedis{
+		RedisAddress: os.Getenv("REDIS_ADDRESS"),
+	}
+
+	return &Config{MyPostgres: pos, MyRedis: redis}
 }
