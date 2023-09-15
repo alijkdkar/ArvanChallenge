@@ -29,19 +29,15 @@ func createUser(ctx *gin.Context) {
 	errJson := ctx.ShouldBindJSON(&userReq)
 
 	if errJson != nil {
-
 		fmt.Println("error on Cast create user to command", errJson)
-
 		pkg.BadRequestError(ctx)
 		return
 	}
 
 	if userReq.MobileNumber == "" {
-
 		ctx.JSON(http.StatusAccepted, gin.H{
 			"message": "Mobile number is reqired.",
 		})
-
 		return
 	}
 
@@ -55,7 +51,6 @@ func createUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, gin.H{
 		"message": "User Saved",
 	})
-
 }
 
 func getAll(ctx *gin.Context) {
@@ -66,7 +61,6 @@ func getAll(ctx *gin.Context) {
 
 func getUserDetail(ctx *gin.Context) {
 
-	fmt.Println("in get detail ", ctx.Request.URL.Path)
 	id := ctx.Param("id")
 	fmt.Println(id)
 	if id == "" {

@@ -22,8 +22,7 @@ func CreditHandlerRegisters(ctx *gin.Engine) {
 
 	ctx.POST(baseUrl+"/:Id/Transaction", CreateTransaction)
 	ctx.GET(baseUrl+"/Transaction/:cardId", getCardTransactions)
-	// ctx.POST(baseUrl+"/:cardId/Transaction", CreateTransaction)
-	// ctx.GET(baseUrl+"/:cardId/Transaction", getCardTransactions)s
+
 }
 
 func getAllCards(ctx *gin.Context) {
@@ -206,7 +205,6 @@ func getCardTransactions(ctx *gin.Context) {
 type CardDto struct {
 	CardNumber string `json:"CardNumber"`
 	Version    uint   `json:"Version"`
-	// UserId     uuid.UUID `json:"UserId"`
 }
 
 type TransactionDto struct {

@@ -10,12 +10,15 @@ import (
 	"github.com/google/uuid"
 )
 
+// register this service endpoint
 func EnableMessageBusServices() {
 	ProducerTransaction()
 	go ConsumeComplite()
 }
 
+// this method produce unComplited transaction to core service every 3 second
 func ProducerTransaction() {
+
 	_dicRepo := discountrepository.CreateNewDiscountRepositoryInstance()
 	ticker := time.NewTicker(3 * time.Second)
 
@@ -56,10 +59,12 @@ func ConsumeComplite() {
 		er := json.Unmarshal([]byte(msg.Payload), &coomand)
 		if er != nil {
 			fmt.Println("error on un marshal complite command")
+			continue
 		}
 		errcom := _dicRepo.CompliteTransaction(coomand.Id)
 		if errcom != nil {
 			fmt.Println("error on complite Trans")
+			continue
 		}
 
 	}

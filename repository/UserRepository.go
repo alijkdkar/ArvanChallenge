@@ -47,6 +47,7 @@ func (rp *UserRepository) GetUsers() []domain.User {
 	return result
 }
 
+// this method checks if this record have modified before this user throw a error for get latest version of data
 func (rp *UserRepository) Update(user *domain.User) error {
 
 	dbData := domain.User{}

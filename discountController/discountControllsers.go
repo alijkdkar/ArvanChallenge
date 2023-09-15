@@ -86,6 +86,7 @@ func UseOfDiscount(ctx *gin.Context) {
 	_dicRepo := discountrepository.CreateNewDiscountRepositoryInstance()
 	if !_dicRepo.ExistsDiscountOpp(uuid.MustParse(Id)) {
 		pkg.NotFoundError(ctx)
+		return
 	}
 
 	newUse := discountdomain.CreateNewDiscountTransactionInstance(uuid.MustParse(Id), uuid.MustParse(cardId))

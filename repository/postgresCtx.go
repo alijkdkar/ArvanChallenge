@@ -17,9 +17,6 @@ const connectionString = "postgres://{{.User}}:{{.Password}}@{{.Host}}:{{.Port}}
 var DB *gorm.DB
 
 func connectionStringMaker(conf pkg.MyPostgres) string {
-
-	fmt.Println(conf)
-	// template,err:= template.New("ConnString").Parse(connectionString)
 	sb := strings.Builder{}
 	temp := template.Must(template.New("connString").Parse(connectionString))
 	fmt.Println(temp)
@@ -29,7 +26,6 @@ func connectionStringMaker(conf pkg.MyPostgres) string {
 	return sb.String()
 }
 
-// func NewPostgres(conf *config.Config) (*gorm.DB, error) {
 func NewPostgres() (*gorm.DB, error) {
 	conf := pkg.Config{}.LOAD()
 	connStr := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",

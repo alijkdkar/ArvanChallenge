@@ -81,11 +81,13 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 			return errors.New("internal server error 1000")
 		}
 
+		//check max useage of discouint
 		if MaxCount <= UsedCount {
 			fmt.Println("discount ended")
 			return errors.New("discount ended")
 		}
 
+		//check this user have used befor
 		usedBefore, errr := tx.Exists(ctx, tranId).Result()
 
 		if errr != nil {
@@ -96,6 +98,7 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 			fmt.Println(" its userd ")
 			return errors.New("you have used of this code")
 		}
+
 		AmountOfDiscount, er1 := strconv.Atoi(counterRes[2].(string))
 		if er1 != nil {
 			return errors.New("discount amount not valid")
@@ -118,8 +121,6 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 }
 
 func (rp *DiscountOpportunityRepository) GetUnComplitedTransaction() ([]*discountdomain.DiscountTransaction, error) {
-
-	fmt.Println("in Gets")
 	ctx := context.Background()
 	res := []*discountdomain.DiscountTransaction{}
 	keys, err := rp.RedisDb.Keys(ctx, "*d-tra-*").Result()
@@ -155,14 +156,17 @@ func (rp *DiscountOpportunityRepository) CompliteTransaction(transId uuid.UUID) 
 	res, er := rp.RedisDb.HSet(ctx, "d-tra-"+transId.String(), "Status", fmt.Sprintf("%d", discountdomain.Complited)).Result()
 	if er != nil {
 		fmt.Println("error on Save complite in db")
+		return er
 	}
-	fmt.Println("res of set status of complit", res)
 
+	fmt.Println("res of set status of complit", res)
 	return nil
 }
 
+// this method recive data and publish to message bus and save in cash until one number
+// out box pattern methodology
 func (rp *DiscountOpportunityRepository) PublishToMessageBus(data []*discountdomain.DiscountTransaction) {
-	// this method recive data and publish to message bus and save in cash until one number
+
 	ctx := context.Background()
 	fmt.Println("Publish data ......", len(data))
 	for _, v := range data {
@@ -170,15 +174,15 @@ func (rp *DiscountOpportunityRepository) PublishToMessageBus(data []*discountdom
 
 			if d == 0 {
 				//set in db with expire time about 30 seceand
-
 				fmt.Println("message Published")
 				js, e := json.Marshal(v)
 				if e != nil {
 					fmt.Println("error on marshal", e)
 				}
-				res, errrr := rp.RedisDb.Publish(ctx, "disc-tran-publish", js).Result()
-				if errrr != nil {
-					fmt.Println("error on publish ", errrr)
+				res, publishError := rp.RedisDb.Publish(ctx, "disc-tran-publish", js).Result()
+				if publishError != nil {
+					fmt.Println("error on publish ", publishError)
+					continue
 				}
 				rp.RedisDb.Set(ctx, "p-b-m-"+v.Id.String(), "-", time.Second*30)
 				fmt.Println("mesage publish result", res)

@@ -20,7 +20,7 @@ func EnableCoreMessageBusServices() {
 func ConsumeIntegrtedTran() {
 	_dicRepo := discountrepository.CreateNewDiscountRepositoryInstance()
 	_carRep := repository.NewCreditCardRepository()
-	fmt.Println("in Ricever")
+
 	go func() {
 		// Subscribe to a channel
 		pubsub := _dicRepo.RedisDb.Subscribe(context.Background(), "disc-tran-publish")
@@ -33,7 +33,7 @@ func ConsumeIntegrtedTran() {
 				fmt.Println("Error receiving message:", err)
 				return
 			}
-			// fmt.Printf(" ************Received message: %s\n", msg.Payload)
+
 			var newdisc DiscountTransactionDto
 			err1 := json.Unmarshal([]byte(msg.Payload), &newdisc)
 			if err1 != nil {
@@ -47,7 +47,7 @@ func ConsumeIntegrtedTran() {
 				fmt.Println("error on save transaction from message bus:", saveEr)
 			}
 			//	must publish to
-			fmt.Println("publish Complite Trans from core to disc")
+
 			senInstance := CompliteSendTransDto{Id: newdisc.Id}
 			js, erCast := json.Marshal(senInstance)
 			if erCast != nil {

@@ -1,0 +1,400 @@
+{
+	"info": {
+		"_postman_id": "1a1c3b74-630d-45f1-886f-f8c3b326ebcd",
+		"name": "arvan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "card",
+			"item": [
+				{
+					"name": "get all user cards",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "create new card",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"CardNumber\":\"card number 1\",\n    \"Version\":0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/card/3210fe2c-17ad-469d-b83c-637ecfe8d13d",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"3210fe2c-17ad-469d-b83c-637ecfe8d13d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update Card",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"CardNumber\":\"card number update\",\n    \"Version\":6129484611666145821\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/card/1007d84d-2b2b-442c-a675-e6ea0480194b/update/650249de-e443-4784-95b6-0b25a61b4058",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"1007d84d-2b2b-442c-a675-e6ea0480194b",
+								"update",
+								"650249de-e443-4784-95b6-0b25a61b4058"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Card Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/card/1007d84d-2b2b-442c-a675-e6ea0480194b/detail/650249de-e443-4784-95b6-0b25a61b4058",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"1007d84d-2b2b-442c-a675-e6ea0480194b",
+								"detail",
+								"650249de-e443-4784-95b6-0b25a61b4058"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete Card",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/card/773eec64-c395-4d5e-b2fb-d8d5ec5576a0",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"773eec64-c395-4d5e-b2fb-d8d5ec5576a0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "new Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Amount\":1000000,\n    \"Type\" :1,\n    \"IsBounce\" :false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/card/650249de-e443-4784-95b6-0b25a61b4058/Transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"650249de-e443-4784-95b6-0b25a61b4058",
+								"Transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Amount\":1000000,\n    \"Type\" :1,\n    \"IsBounce\" :false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/card/650249de-e443-4784-95b6-0b25a61b4058/Transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"card",
+								"650249de-e443-4784-95b6-0b25a61b4058",
+								"Transaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Get all user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/user/all",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a user info",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"behzad test gin\",\n    \"LastName\": \"bluekian test gin\",\n    \"MobileNumber\": \"09132120832\",\n    \"Version\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update usr",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"behzad update\",\n    \"LastName\": \"bluekian update\",\n    \"MobileNumber\": \"09132120832\",\n    \"Version\": 8674665223082153551\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/user/214d06f9-d05e-411e-bd4c-b9f2168e95bf",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"user",
+								"214d06f9-d05e-411e-bd4c-b9f2168e95bf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/user/214d06f9-d05e-411e-bd4c-b9f2168e95bf",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"user",
+								"214d06f9-d05e-411e-bd4c-b9f2168e95bf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users got discount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/user/discountused574da4a7-4f9b-4462-b46d-34835f437a9e",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"user",
+								"discountused574da4a7-4f9b-4462-b46d-34835f437a9e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Discount",
+			"item": [
+				{
+					"name": "create new discount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\":\"teset\",\n    \"MaxCount\": 1000,\n    \"Amount\": 10000000,\n    \"EnableTime\":\"\",\n    \"Code\":\"DASCZXCASD\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/discount/",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"discount",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove JobOpp",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\":\"teset\",\n    \"MaxCount\": 1000,\n    \"Amount\": 10000000,\n    \"EnableTime\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4879/discount/37217d20-9c4f-4cd4-9e41-9b374601ae1e",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"discount",
+								"37217d20-9c4f-4cd4-9e41-9b374601ae1e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UseDiscountCode",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:4879/discount/0933ab4d-8e4f-4e59-b373-08c89bb035f3/use/d3adcb0c-a480-46ca-8308-b36987e86203",
+							"host": [
+								"localhost"
+							],
+							"port": "4879",
+							"path": [
+								"discount",
+								"0933ab4d-8e4f-4e59-b373-08c89bb035f3",
+								"use",
+								"d3adcb0c-a480-46ca-8308-b36987e86203"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

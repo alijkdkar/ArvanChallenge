@@ -22,13 +22,15 @@ func NewCreditCardRepository() *CreditCardRepository {
 var _ domain.ICreditCardRepositroy = (*CreditCardRepository)(nil)
 
 func (rp *CreditCardRepository) GetUsersUsedDiscount(discountId uuid.UUID) []*domain.User {
-	res := []*domain.User{}
+	users := []*domain.User{}
+
 	transactions := []domain.Transaction{}
 	rp.Db.Find(&transactions, "discount_refer_id = ?", discountId)
 	cardIds := []uuid.UUID{}
 	for _, v := range transactions {
 		cardIds = append(cardIds, v.CardNumberRefer)
 	}
+
 	cards := []*domain.CreditCard{}
 	rp.Db.Where("id IN ?", cardIds).Find(&cards)
 	userIds := []uuid.UUID{}
@@ -36,8 +38,8 @@ func (rp *CreditCardRepository) GetUsersUsedDiscount(discountId uuid.UUID) []*do
 		userIds = append(userIds, v.UserRefer)
 	}
 
-	rp.Db.Where("id IN ?", userIds).Find(&res)
-	return res
+	rp.Db.Where("id IN ?", userIds).Find(&users)
+	return users
 }
 
 func (rp *CreditCardRepository) Create(card *domain.CreditCard) error {
