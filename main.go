@@ -37,6 +37,6 @@ func main() {
 	//set discount manager controller handler service 2
 	discountcontroller.RegisterDiscountServices(mux)
 
-	//two below services just has relation together
+	//two below services just have relation with message bus connection
 	log.Fatal(mux.Run(":4879"))
 }
