@@ -18,6 +18,7 @@ func UserHandlerRegister(ctx *gin.Engine) {
 	ctx.DELETE(baseUrl+"/:id", deleteUser)
 	ctx.GET(baseUrl+"/:id", getUserDetail)
 	ctx.PUT(baseUrl+"/:id", updateUser)
+	ctx.GET(baseUrl+"/discountused/:Id", GetUsersUsedDiscount)
 
 }
 
@@ -134,6 +135,20 @@ func updateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, gin.H{
 		"message": "user updated",
 	})
+}
+
+func GetUsersUsedDiscount(ctx *gin.Context) {
+	id := ctx.Param("Id")
+	if id == "" {
+		fmt.Println("Id Got:", id)
+		pkg.BadRequestError(ctx)
+		return
+	}
+
+	_cardRepo := repository.NewCreditCardRepository()
+	lis := _cardRepo.GetUsersUsedDiscount(uuid.MustParse(id))
+
+	ctx.JSON(http.StatusOK, lis)
 }
 
 type createUserCommand struct {

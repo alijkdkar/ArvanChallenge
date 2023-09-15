@@ -47,4 +47,5 @@ type ICreditCardRepositroy interface {
 	GetCreditCards(id uuid.UUID) []CreditCard
 	AddTransaction(transaction *Transaction) error
 	GetTransactions(id uuid.UUID) []*Transaction
+	GetUsersUsedDiscount(discountId uuid.UUID) []*User
 }
