@@ -33,6 +33,7 @@ func main() {
 
 	//set acount manager controller handler service 1
 	controller.RegisterControllers(mux)
+
 	//set discount manager controller handler service 2
 	discountcontroller.RegisterDiscountServices(mux)
 

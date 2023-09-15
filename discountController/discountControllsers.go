@@ -88,9 +88,8 @@ func UseOfDiscount(ctx *gin.Context) {
 		pkg.NotFoundError(ctx)
 	}
 
-	fmt.Println("after check exits", Id, cardId)
 	newUse := discountdomain.CreateNewDiscountTransactionInstance(uuid.MustParse(Id), uuid.MustParse(cardId))
-	fmt.Println("new trans;", newUse)
+
 	saveErr := _dicRepo.AddNewDiscountUse(newUse)
 	if saveErr != nil {
 		pkg.CommonError(ctx, http.StatusOK, saveErr.Error())

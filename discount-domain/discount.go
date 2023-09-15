@@ -28,6 +28,7 @@ func (user DiscountOpportunity) DiscountToMap() map[string]interface{} {
 	DiscountMap["MaxCount"] = user.MaxCount
 	DiscountMap["EnableTime"] = user.EnableTime
 	DiscountMap["UsedCount"] = user.UsedCount
+	DiscountMap["Amount"] = user.Amount
 	return DiscountMap
 }
 
@@ -48,4 +49,5 @@ type IDiscountOpportunityRepository interface {
 	CreateDiscountOpp(disc DiscountOpportunity) error
 	RemoveDiscountOpp(Id uuid.UUID) error
 	ExistsDiscountOpp(Id uuid.UUID) bool
+	CompliteTransaction(transId uuid.UUID) error
 }
