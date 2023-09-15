@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// register end point to gin or enable message bus agent
 func RegisterControllers(ctx *gin.Engine) {
 
 	ctx.NoRoute(func(c *gin.Context) {

@@ -134,7 +134,6 @@ func updateUser(ctx *gin.Context) {
 func GetUsersUsedDiscount(ctx *gin.Context) {
 	id := ctx.Param("Id")
 	if id == "" {
-		fmt.Println("Id Got:", id)
 		pkg.BadRequestError(ctx)
 		return
 	}
