@@ -88,13 +88,13 @@ func (rp *DiscountOpportunityRepository) AddNewDiscountUse(discTrans *discountdo
 		}
 
 		//check this user have used befor
-		usedBefore, errr := tx.Exists(ctx, tranId).Result()
+		usedBefore, errr := rp.ExistsTransactions(discTrans)
 
 		if errr != nil {
 			fmt.Println("check used opertion error ")
 			return errors.New("server side error")
 		}
-		if usedBefore == 1 {
+		if usedBefore {
 			fmt.Println(" its userd ")
 			return errors.New("you have used of this code")
 		}
@@ -147,6 +147,27 @@ func (rp *DiscountOpportunityRepository) GetUnComplitedTransaction() ([]*discoun
 		}
 	}
 	return res, nil
+}
+
+func (rp *DiscountOpportunityRepository) ExistsTransactions(tran *discountdomain.DiscountTransaction) (bool, error) {
+	ctx := context.Background()
+	keys, err := rp.RedisDb.Keys(ctx, "*d-tra-*").Result()
+
+	if err != nil {
+		return false, err
+	}
+
+	for _, v := range keys {
+		tr, er := rp.RedisDb.HGetAll(ctx, v).Result()
+		if er != nil {
+			fmt.Println("key Read Error", v, er)
+			continue
+		}
+		if tr["CardId"] == tran.CardId.String() && tr["DiscountId"] == tran.DiscountId.String() {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func (rp *DiscountOpportunityRepository) CompliteTransaction(transId uuid.UUID) error {
